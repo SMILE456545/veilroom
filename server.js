@@ -4,7 +4,8 @@ const fs = require('fs');
 const path = require('path');
 
 const PORT = process.env.PORT || 3000;
-const sessions = new Map();
+const sessionFile = path.join(__dirname, 'sessions.json');
+const sessions = new Map(fs.existsSync(sessionFile) ? Object.entries(JSON.parse(fs.readFileSync(sessionFile, 'utf8'))) : []);
 const users = new Map([
   ['mira', { username: 'mira', passwordHash: hash('veilroom'), display: 'Mira Chen', privateNumber: 'VR-1048', role: 'member' }],
   ['noah', { username: 'noah', passwordHash: hash('nightgarden'), display: 'Noah Williams', privateNumber: 'VR-2716', role: 'member' }],
@@ -16,6 +17,7 @@ const messages = new Map([
 ]);
 
 function hash(value) { return crypto.createHash('sha256').update(value).digest('hex'); }
+function persistSessions() { fs.writeFileSync(sessionFile, JSON.stringify(Object.fromEntries(sessions))); }
 function json(response, status, body) { response.writeHead(status, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Content-Type, Authorization', 'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS' }); response.end(JSON.stringify(body)); }
 function body(request) { return new Promise((resolve, reject) => { let data = ''; request.on('data', (chunk) => { data += chunk; }); request.on('end', () => { try { resolve(data ? JSON.parse(data) : {}); } catch (error) { reject(error); } }); }); }
 function auth(request) { const token = request.headers.authorization?.replace('Bearer ', ''); return sessions.get(token); }
@@ -31,7 +33,7 @@ async function handler(request, response) {
     if (request.method === 'POST' && url.pathname === '/api/login') {
       const input = await body(request); const user = users.get(String(input.username || '').toLowerCase());
       if (!user || user.passwordHash !== hash(String(input.password || ''))) return json(response, 401, { error: 'Invalid credentials.' });
-      const token = crypto.randomBytes(32).toString('hex'); sessions.set(token, user.username); return json(response, 200, { token, user: publicUser(user) });
+      const token = crypto.randomBytes(32).toString('hex'); sessions.set(token, user.username); persistSessions(); return json(response, 200, { token, user: publicUser(user) });
     }
     const username = auth(request); if (!username) return json(response, 401, { error: 'Authentication required.' });
     const current = users.get(username);
