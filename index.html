@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Veilroom private encrypted conversations">
+  <title>Veilroom | Private by design</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">V</span><span>veilroom</span></div>
+      <div class="privacy-chip"><span class="pulse"></span><span>location sealed</span></div>
+      <nav class="nav-list" aria-label="Primary navigation">
+        <button class="nav-item active" data-view="inbox"><span class="nav-icon">◫</span>Inbox<span class="count">3</span></button>
+        <button class="nav-item" data-view="contacts"><span class="nav-icon">◎</span>Contacts</button>
+        <button class="nav-item" data-view="files"><span class="nav-icon">⌁</span>Shared files</button>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="session-card"><div class="status-dot"></div><div><strong id="sidebarUser">guest</strong><span>ephemeral session</span></div><button class="icon-button" id="logoutBtn" title="Sign out">↪</button></div>
+        <button class="admin-link" id="adminBtn"><span>⌘</span> Admin console</button>
+      </div>
+    </aside>
+
+    <main class="main-panel">
+      <header class="topbar"><div class="mobile-brand">veilroom</div><div class="secure-label"><span class="lock-icon">⌑</span> end-to-end encrypted <span class="divider"></span> key rotates in <strong id="keyTimer">14:59</strong></div><button class="icon-button mobile-menu" title="Menu">☰</button></header>
+      <section class="view" id="inboxView">
+        <div class="content-heading"><div><p class="eyebrow">PRIVATE INBOX</p><h1>Good evening, <span id="headingUser">there</span></h1><p class="muted">Your conversations are sealed between devices.</p></div><button class="primary-button" id="newChatBtn"><span>＋</span> New conversation</button></div>
+        <div class="inbox-layout">
+          <div class="conversation-list" id="conversationList"></div>
+          <section class="chat-panel" id="chatPanel">
+            <div class="empty-chat"><div class="empty-glyph">✦</div><h2>Select a conversation</h2><p>Nothing leaves your private session without your approval.</p></div>
+          </section>
+        </div>
+      </section>
+      <section class="view hidden" id="contactsView"><div class="content-heading"><div><p class="eyebrow">DIRECTORY</p><h1>Contacts</h1><p class="muted">Only handles are visible. No addresses, no locations.</p></div><button class="primary-button" id="contactChatBtn">＋ Start conversation</button></div><div class="contact-grid" id="contactGrid"></div></section>
+      <section class="view hidden" id="filesView"><div class="content-heading"><div><p class="eyebrow">PRIVATE TRANSFER</p><h1>Shared files</h1><p class="muted">Files are encrypted in your browser before transfer.</p></div><button class="primary-button" id="uploadBtn">↑ Choose file</button></div><div class="file-drop" id="fileDrop"><div class="drop-icon">↥</div><h2>Drop encrypted files here</h2><p>Maximum 100 MB per file · temporary storage only</p><button class="text-button" id="browseBtn">Browse files</button></div><div class="file-list" id="fileList"></div></section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop hidden" id="modalBackdrop"><div class="modal" id="modal"></div></div>
+  <input type="file" id="fileInput" hidden>
+  <script src="app.js"></script>
+</body>
+</html>
