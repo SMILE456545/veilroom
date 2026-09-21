@@ -18,6 +18,14 @@ Demo accounts:
 
 ## Public deployment
 
-GitHub Pages can host the frontend, but it cannot run `server.js`. Deploy this project to a Node host such as Render, Railway, Fly.io, or a VPS and expose its HTTPS URL. Then configure the frontend to use that backend URL, or serve the frontend from the same Node host as this project.
+Deploy the whole repository to Render so the public URL serves both the frontend and the shared backend:
+
+1. Push the latest files to GitHub, including `server.js`, `package.json`, and `render.yaml`.
+2. In Render, choose **New + > Web Service** and connect the `SMILE456545/veilroom` repository.
+3. Render will read `render.yaml`; use `npm install` for the build and `npm start` for the start command.
+4. Open the generated HTTPS URL, for example `https://veilroom.onrender.com`.
+5. Share that URL with users. They can log in and use the shared backend from any device.
+
+GitHub Pages alone cannot run `server.js`, so its URL remains a frontend-only demo. The Render URL is the public multi-user site.
 
 The current server stores data in memory for demonstration. A production deployment needs a persistent database, HTTPS, secure password storage, rate limiting, and a proper WebRTC signaling service.
